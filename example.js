@@ -10,7 +10,7 @@
 app.get('/todos', (req, res) => {
     res.json(todos);
   });
-  app.get('/todos/:id', (req, res) => {
+  app.get('/todos/id', (req, res) => {
     const todo = todos.find(t => t.id === parseInt(req.params.id));
     if (!todo) {
       res.status(404).send();
@@ -21,7 +21,7 @@ app.get('/todos', (req, res) => {
 
 // example 2 will be=>
   
-app.delete('/todos/:id', (req, res) => {
+app.delete('/todos/id', (req, res) => {
     const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id));
     if (todoIndex === -1) {
       res.status(404).send();
