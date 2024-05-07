@@ -1,3 +1,4 @@
+const mongoose=require("mongoose")
 
     const express = require('express');
     const fs = require('fs');
@@ -29,5 +30,18 @@
       res.status(404).send("Route not found");
     });
     
-    module.exports = app;
-    
+    module.export
+const dbConnect=()=>{
+    mongoose.connect("mongodb://localhost:27017/todoBase",{
+        useNewUrlParser:true,
+        useUnifiedTopology:true,
+    })
+    .then(()=>{
+        console.log("DataBase Connection Stablished")
+    })
+    .catch((err)=>{
+        console.log("Error in DB Connection !!!")
+    })
+}
+module.exports=dbConnect
+

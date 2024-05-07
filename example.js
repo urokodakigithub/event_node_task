@@ -1,32 +1,81 @@
-/*
-   tasks are easy to do so try on your own first 
-   then look for the answers any where else
+const express=require("express");
+const todo=require("./todosModel")
+const router=express.Router()
 
-   
-   note: this is just a route example the route  can be diff from this 
-         this is just to give you some idea how to do it
-*/
-
-app.get('/todos', (req, res) => {
-    res.json(todos);
-  });
-  app.get('/todos/id', (req, res) => {
-    const todo = todos.find(t => t.id === parseInt(req.params.id));
-    if (!todo) {
-      res.status(404).send();
-    } else {
-      res.json(todo);
-    }
-  });
-
-// example 2 will be=>
+// creating a user
+router.post('/create', async(req, res) => {
+  try{
+    const {name,email,number} = req.body;
+    console.log(req.body)
+    const data = await todo.create({name,email,number} );
+    console.log("Request",req.body)
+    res.status(201).json({
+      success:true,
+      data:data,
+    });
+  }
+  catch(err){
+    res.status(500).json({
+      success:false,
+      msg:"Errror in create "
+    })
+  }
   
-app.delete('/todos/id', (req, res) => {
-    const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id));
-    if (todoIndex === -1) {
-      res.status(404).send();
-    } else {
-      todos.splice(todoIndex, 1);
-      res.status(200).send();
-    }
-  });
+});
+
+// get all user data
+router.get('/all',async(req,res)=>{
+  try{
+    const data=await todo.find({})
+    res.status(200).json({
+      success:true,
+      data:data,
+    })
+  }
+  catch(err){
+    res.status(500).json({
+      success:false,
+      msg:"Errror in getting user"
+    })
+  }
+})
+
+// find by id and delete
+
+router.put("/delete/:id",async(req,res)=>{
+  try{
+    const id=req.params.id;
+    const user= await todo.findByIdAndDelete(id)
+    res.status(500).json({
+      success:true,
+      data:user,
+    })
+  }
+  catch(err){
+    res.status(500).json({
+      success:false,
+      msg:"Errror in deletion"
+    })
+  }
+})
+
+//find by id and update
+router.put("/update/:id",async(req,res)=>{
+  try{
+    const id=req.params.id;
+    const {name,email,number}=req.body;
+    const user=await todo.findByIdAndUpdate(id,{name,email,number})
+    res.status(200).json({
+      success:true,
+      data:user,
+      msg:"User data Updated"
+    })
+  }
+  catch(err){
+    res.status(500).json({
+      success:false,
+      msg:"Errror in update"
+    })
+  }
+})
+module.exports=router
